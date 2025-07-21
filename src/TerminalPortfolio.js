@@ -159,6 +159,54 @@ const ProjectModal = ({ project, onClose }) => {
   );
 };
 
+const ExperienceModal = ({ experience, onClose }) => {
+  if (!experience) return null;
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+      <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 max-w-lg w-full">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl text-green-500 font-mono">{experience.title} at {experience.company}</h2>
+          <button 
+            onClick={onClose}
+            className="text-gray-400 hover:text-white"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="mb-4 text-green-300">
+          <ul className="list-disc pl-5">
+            {experience.description.map((desc, index) => (
+              <li key={index}>{desc}</li>
+            ))}
+          </ul>
+          <p className="text-gray-400">Duration: <span className="text-green-300">{experience.duration}</span></p>
+        </div>
+        <div>
+            <span className="text-gray-400">Link: </span>
+            <a 
+              href={experience.link} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              {experience.link}
+            </a>
+          </div>
+        <div className="text-right">
+          <button 
+            onClick={onClose}
+            className="bg-gray-800 text-green-500 px-4 py-2 rounded hover:bg-gray-700"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 const MatrixEffect = ({ onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -187,6 +235,7 @@ export default function TerminalPortfolio() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedExperience, setSelectedExperience] = useState(null);
   const [showMatrix, setShowMatrix] = useState(false);
   
   const terminalRef = useRef(null);
@@ -236,15 +285,28 @@ export default function TerminalPortfolio() {
         newOutput.push({ content: `  ${project.id} - ${project.title}`, type: 'text' });
       });
     } 
+    else if (cmdLower === 'ls' || cmdLower === 'ls experience') {
+      newOutput.push({ content: 'Experience:', type: 'text' });
+      portfolioData.experience.forEach(exp => {
+        newOutput.push({ content: `  ${exp.title} at ${exp.company}, id: ${exp.id}`, type: 'text' });
+      });
+    } 
     else if (cmdLower.startsWith('open ')) {
-      const projectId = cmdLower.split(' ')[1];
-      const project = portfolioData.projects.find(p => p.id === projectId);
-      
+      const idToOpen = cmdLower.split(' ')[1];
+      // Check if it's a project
+      const project = portfolioData.projects.find(p => p.id === idToOpen);
       if (project) {
         newOutput.push({ content: `Opening ${project.title}...`, type: 'text' });
         setSelectedProject(project);
       } else {
-        newOutput.push({ content: `Error: Project '${projectId}' not found. Use 'ls projects' to see available projects.`, type: 'text' });
+        // Check if it's experience
+        const exp = portfolioData.experience.find(e => e.id === idToOpen);
+        if (exp) {
+          newOutput.push({ content: `Opening ${exp.title} at ${exp.company}...`, type: 'text' });
+          setSelectedExperience(exp);
+        } else {
+          newOutput.push({ content: `Error: Item '${idToOpen}' not found. Use 'ls projects' or 'ls experience' to see available items.`, type: 'text' });
+        }
       }
     } 
     else if (cmdLower === 'about') {
@@ -302,9 +364,6 @@ export default function TerminalPortfolio() {
       // In a real implementation, you would trigger a file download here
       newOutput.push({ content: 'This would download a real PDF in the actual implementation.', type: 'text' });
     } 
-    // else if (cmdLower === 'banner') {
-    //   newOutput.push({ content: portfolioData.asciiArt, type: 'text' });
-    // } 
     else if (cmdLower === 'matrix') {
       newOutput.push({ content: 'Entering the Matrix...', type: 'text' });
       setShowMatrix(true);
@@ -376,7 +435,15 @@ export default function TerminalPortfolio() {
           onClose={() => setSelectedProject(null)} 
         />
       )}
-      
+
+      {/* Experience Modal */}
+      {selectedExperience && (
+        <ExperienceModal 
+          experience={selectedExperience} 
+          onClose={() => setSelectedExperience(null)} 
+        />
+      )}
+
       {/* Matrix Effect */}
       {showMatrix && (
         <MatrixEffect onClose={() => setShowMatrix(false)} />

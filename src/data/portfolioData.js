@@ -19,7 +19,7 @@ const portfolioData = {
       title: 'E-Commerce Platform', 
       description: 'Fully functional e-commerce site with cart and payment processing', 
       tech: ['Next.js', 'MongoDB', 'Stripe'],
-    //   link: 'https://github.com/yourusername/ecommerce-app'
+      link: 'https://github.com/yourusername/ecommerce-app'
     },
     { 
       id: 'ai-assistant', 
@@ -27,6 +27,30 @@ const portfolioData = {
       description: 'Conversational AI assistant with natural language processing', 
       tech: ['Python', 'TensorFlow', 'Flask'],
       link: 'https://github.com/yourusername/ai-assistant'
+    }
+  ],
+  // Work experience
+  experience: [
+    {
+      id: 'exospore',
+      title: 'Exospore, Researcher',
+      company: 'SETI, NASA',
+      duration: 'June 2024 - Present',
+      link: 'https://tinyurl.com/yktc2uex',
+      description: [
+        "Optimized CNN models using Detectron2 for bacterial spore classification in SEM images (94% precision-recall).",
+        "Implemented large-scale parallelization & hyperparameter tuning with Ray Tune on NVIDIA GPUs (GCP).",
+        "Contributed to Exospore, a planetary protection project studying microorganism survival in Martian-like conditions."
+      ]},
+    {
+      id: 'webdev',
+      title: 'Web Developer',
+      company: 'Virufy',
+      duration: 'June 2024 - September 2024',
+      description: [
+        "Boosted web app performance to 95+ PageInsights by designing and deploying a full-stack solution using React.js, Node.js, and TypeScript.",
+        "Accelerated development cycles by integrating CI/CD workflows and QA testing in an Agile team, resolving key bugs."
+      ]
     }
   ],
   
@@ -60,16 +84,6 @@ const portfolioData = {
     'efficient backend systems.'
   ],
   
-//   // ASCII art banner (generated from patorjk.com)
-//   asciiArt: `
-// ███████╗ █████╗ ██╗   ██╗███████╗██╗  ██╗ █████╗ 
-// ██╔════╝██╔══██╗╚██╗ ██╔╝██╔════╝██║  ██║██╔══██╗
-// █████╗  ███████║ ╚████╔╝ ███████╗███████║███████║
-// ██╔══╝  ██╔══██║  ╚██╔╝  ╚════██║██╔══██║██╔══██║
-// ███████╗██║  ██║   ██║   ███████║██║  ██║██║  ██║
-// ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
-                                                  
-// `,
   
   // README content
   readme: [
@@ -104,16 +118,18 @@ const portfolioData = {
   
   // Available commands
   commands: [
-    'help', 'ls', 'ls projects', 'open', 'about', 'skills', 
+    'help', 'ls', 'ls projects', 'ls experience', 'open', 'about', 'skills', 
     'contact', 'clear', 'history', 'cat README.md', 'cd motivation',
     'sudo hire-me', 'download resume', 'matrix', 'coffee'
-  ], //'banner',
+  ],
   
   // Command descriptions for help
   commandDescriptions: [
     { command: 'help', description: 'Show this help message' },
     { command: 'ls projects', description: 'List all projects' },
+    { command: 'ls experience', description: 'List all work experience' },
     { command: 'open [project]', description: 'View project details' },
+    { command: 'open [experience]', description: 'View experience details' },
     { command: 'about', description: 'About me' },
     { command: 'skills', description: 'My technical skills' },
     { command: 'contact', description: 'How to reach me' },
@@ -121,8 +137,7 @@ const portfolioData = {
     { command: 'history', description: 'View command history' },
     { command: 'cat README.md', description: 'Display README file' },
     { command: 'cd motivation', description: 'Random programming quote' },
-    { command: 'download resume', description: 'Download my resume' },
-    // { command: 'banner', description: 'Display ASCII art banner' }
+    { command: 'download resume', description: 'Download my resume' }
   ],
   
   // Config
