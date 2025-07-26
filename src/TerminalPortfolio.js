@@ -108,6 +108,10 @@ const OutputLine = ({ content, type = 'text' }) => {
         </a>
       </div>
     );
+  } else if (type === 'jsx') {
+    return <div className="text-green-300 pl-0">{content}</div>;
+  } else if (content.trim() === '') {
+    return <div className="h-3" />;
   } else {
     return <div className="text-green-300 pl-0">{content}</div>;
   }
@@ -129,7 +133,12 @@ const ProjectModal = ({ project, onClose }) => {
           </button>
         </div>
         <div className="mb-4">
-          <p className="text-green-300 mb-2">{project.description}</p>
+          {/* <p className="text-green-300 mb-2">{project.description}</p> */}
+          <ul className="list-disc pl-5">
+            {project.description.map((desc, index) => (
+              <li key={index}>{desc}</li>
+            ))}
+          </ul>
           <div className="mb-2">
             <span className="text-gray-400">Tech Stack: </span>
             <span className="text-green-300">{project.tech.join(', ')}</span>
@@ -206,6 +215,57 @@ const ExperienceModal = ({ experience, onClose }) => {
   );
 };
 
+// const ReadmeModal = ({ readme, onClose }) => {
+//   const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+//   return (
+//     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+//       <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 max-w-2xl w-full font-mono text-sm">
+//         <div className="flex justify-between items-center mb-4">
+//           <h2 className="text-xl text-green-500">readme.md</h2>
+//           <button onClick={onClose} className="text-gray-400 hover:text-white">✕</button>
+//         </div>
+//         <div className="text-green-300 space-y-1 mb-4">
+//           {readme.map((line, index) => {
+//             if (urlRegex.test(line)) {
+//               const parts = line.split(urlRegex);
+//               return (
+//                 <div key={index}>
+//                   {parts.map((part, i) =>
+//                     urlRegex.test(part) ? (
+//                       <a
+//                         key={i}
+//                         href={part}
+//                         target="_blank"
+//                         rel="noopener noreferrer"
+//                         className="text-blue-400 underline hover:text-blue-300"
+//                       >
+//                         {part}
+//                       </a>
+//                     ) : (
+//                       <span key={i}>{part}</span>
+//                     )
+//                   )}
+//                 </div>
+//               );
+//             } else {
+//               return <div key={index}>{line}</div>;
+//             }
+//           })}
+//         </div>
+//         <div className="text-right">
+//           <button
+//             onClick={onClose}
+//             className="bg-gray-800 text-green-500 px-4 py-2 rounded hover:bg-gray-700"
+//           >
+//             Close
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
 
 const MatrixEffect = ({ onClose }) => {
   useEffect(() => {
@@ -237,6 +297,8 @@ export default function TerminalPortfolio() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedExperience, setSelectedExperience] = useState(null);
   const [showMatrix, setShowMatrix] = useState(false);
+  // const [showReadme, setShowReadme] = useState(false);
+
   
   const terminalRef = useRef(null);
   
@@ -282,15 +344,29 @@ export default function TerminalPortfolio() {
     else if (cmdLower === 'ls' || cmdLower === 'ls projects') {
       newOutput.push({ content: 'Projects:', type: 'text' });
       portfolioData.projects.forEach(project => {
-        newOutput.push({ content: `  ${project.id} - ${project.title}`, type: 'text' });
+        newOutput.push({
+          content: (
+            <div>
+              - {project.title}, id: <span className="text-blue-400">{project.id}</span>
+            </div>
+          ),
+          type: 'jsx'
+        });
       });
     } 
     else if (cmdLower === 'ls' || cmdLower === 'ls experience') {
       newOutput.push({ content: 'Experience:', type: 'text' });
       portfolioData.experience.forEach(exp => {
-        newOutput.push({ content: `  ${exp.title} at ${exp.company}, id: ${exp.id}`, type: 'text' });
+        newOutput.push({
+          content: (
+            <div>
+              - {exp.title} at {exp.company}, id: <span className="text-blue-400">{exp.id}</span>
+            </div>
+          ),
+          type: 'jsx'
+        });
       });
-    } 
+    }
     else if (cmdLower.startsWith('open ')) {
       const idToOpen = cmdLower.split(' ')[1];
       // Check if it's a project
@@ -317,10 +393,14 @@ export default function TerminalPortfolio() {
     } 
     else if (cmdLower === 'skills') {
       newOutput.push({ content: 'Technical Skills:', type: 'text' });
-      portfolioData.skills.forEach(skill => {
-        newOutput.push({ content: `  ${skill}`, type: 'text' });
+
+      portfolioData.skills.forEach(skillCategory => {
+        newOutput.push({ content: `\n${skillCategory.category}:`, type: 'text' });
+        skillCategory.items.forEach(item => {
+          newOutput.push({ content: `  - ${item}`, type: 'text' });
+        });
       });
-    } 
+    }
     else if (cmdLower === 'contact') {
     newOutput.push({ content: 'Contact Information:', type: 'text' });
     portfolioData.contactInfo.forEach(contact => {
@@ -345,10 +425,35 @@ export default function TerminalPortfolio() {
       });
     } 
     else if (cmdLower === 'cat readme.md') {
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+
       portfolioData.readme.forEach(line => {
-        newOutput.push({ content: line, type: 'text' });
+        if (urlRegex.test(line)) {
+          const parts = line.split(urlRegex);
+          newOutput.push({
+            content: parts.map((part, i) =>
+              urlRegex.test(part) ? (
+                <a
+                  key={i}
+                  href={part}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 underline hover:text-blue-300"
+                >
+                  {part}
+                </a>
+              ) : (
+                <span key={i}>{part}</span>
+              )
+            ),
+            type: 'jsx'
+          });
+        } else {
+          newOutput.push({ content: line, type: 'text' });
+        }
       });
-    } 
+    }
+
     else if (cmdLower === 'cd motivation') {
       const randomQuote = getRandomItem(portfolioData.easterEggs.quotes);
       newOutput.push({ content: randomQuote, type: 'text' });
@@ -362,7 +467,11 @@ export default function TerminalPortfolio() {
     else if (cmdLower === 'download resume') {
       newOutput.push({ content: 'Initiating resume download...', type: 'text' });
       // In a real implementation, you would trigger a file download here
-      newOutput.push({ content: 'This would download a real PDF in the actual implementation.', type: 'text' });
+      const link = document.createElement('a');
+      link.href = 'Naysha_CV_Master.pdf';
+      link.download = 'Naysha_CV_Master.pdf';
+      link.click();
+      // newOutput.push({ content: 'This would download a real PDF in the actual implementation.', type: 'text' });
     } 
     else if (cmdLower === 'matrix') {
       newOutput.push({ content: 'Entering the Matrix...', type: 'text' });
@@ -443,7 +552,6 @@ export default function TerminalPortfolio() {
           onClose={() => setSelectedExperience(null)} 
         />
       )}
-
       {/* Matrix Effect */}
       {showMatrix && (
         <MatrixEffect onClose={() => setShowMatrix(false)} />
