@@ -208,7 +208,7 @@ const portfolioData = {
     '## More About Me',
     '',
     "- Been grooving as a Kathak dancer for 16 years — it’s kinda my thing! ",
-    '  → Watch my latest performance: https://youtu.be/E1IplD4I6vg?feature=shared',
+    '  → Watch my latest performance: https://youtu.be/E1IplD4I6vg?t=1791',
     '',
     "- I love capturing cool videos and pictures. I am an avid movie watcher especially for critiquing cinematography — Interstellar, The Intern, Catch Me If You Can are some of my faves.",
     "- I think I'll probably add a section of my movie reviews here soon, so stay tuned!",
