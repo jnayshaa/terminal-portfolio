@@ -15,7 +15,7 @@ const portfolioData = {
         'Currently expanding into a Flutter app at 1871, Chicago'
       ],
       tech: ['Flutter', 'GDScript', 'Godot'],
-      link: 'https://github.com/yourusername/terminal-portfolio'
+      link: 'https://simonsigns.itch.io/simon-signs'
     },
     { 
       id: 'gradence', 
