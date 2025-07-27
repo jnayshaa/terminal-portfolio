@@ -187,7 +187,7 @@ const portfolioData = {
   
   // About information
   about: [
-  "Namaste! I’m Naysha, a CS + Physics-Astronomy student, researcher, and someone who’s as comfortable tweaking AI models as I am obbserving at the observatory.",
+  "Namaste! I’m Naysha, a CS + Physics-Astronomy student, researcher, and someone who’s as comfortable tweaking AI models as I am observing at the observatory.",
   "",
   "I’ve spent the last few years building things at the intersection of tech, science, and self-expression",
   "",
